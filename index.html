@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gaze Detection — Aditya</title>
+
+    <!-- MediaPipe -->
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/face_mesh.js" crossorigin="anonymous"></script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+    <h1>GAZE DETECTION</h1>
+    <p>Detects when a person looks left or right off-screen — tracks every event with timestamp &amp; duration</p>
+</header>
+
+<div class="container">
+
+    <!-- ── Left Panel ── -->
+    <div class="left-panel">
+
+        <!-- Mode Toggle -->
+        <div class="mode-toggle-card">
+            <button id="btn_mode_video" class="mode-btn active">
+                <span class="mode-icon">🎬</span> Video Upload
+            </button>
+            <button id="btn_mode_webcam" class="mode-btn">
+                <span class="mode-icon">📷</span> Live Webcam
+            </button>
+        </div>
+
+        <!-- Upload (video mode only) -->
+        <div id="upload_section" class="upload-card">
+            <input type="file" id="video_upload" accept="video/*" title="Upload Video">
+            <label for="video_upload">
+                <span class="upload-icon">📁</span>
+                <span>Click to upload a video file</span>
+                <span class="upload-sub">MP4, WebM, MOV supported</span>
+            </label>
+        </div>
+
+        <!-- Video / Camera Feed -->
+        <div class="video-card">
+            <video id="input_video" playsinline muted></video>
+            <canvas id="output_canvas"></canvas>
+
+            <div id="loading_overlay">
+                <div class="spinner"></div>
+                <div>Loading FaceMesh Model…</div>
+            </div>
+
+            <div id="status_overlay" class="status-overlay">Waiting…</div>
+
+            <!-- Live active-event banner (shown while person is looking away) -->
+            <div id="active_event_banner" class="active-event-banner" style="display:none"></div>
+        </div>
+
+        <!-- Controls Card -->
+        <div class="controls-card" id="controls_card" style="display:none">
+
+            <!-- Video mode controls -->
+            <div id="video_controls">
+                <div class="action-buttons">
+                    <button id="btn_start" class="btn primary" disabled>▶ Start Analysis</button>
+                    <button id="btn_stop"  class="btn danger"  disabled>■ Stop</button>
+                </div>
+                <div class="playback-controls">
+                    <span id="time_current" class="time-display">00:00</span>
+                    <input type="range" id="seek_bar" class="seek-bar" value="0" step="0.1" min="0" title="Seek">
+                    <span id="time_total" class="time-display">00:00</span>
+                    <select id="speed_select" class="speed-select" title="Playback Speed">
+                        <option value="0.5">0.5×</option>
+                        <option value="1" selected>1.0×</option>
+                        <option value="2">2.0×</option>
+                        <option value="4">4.0×</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Webcam mode controls -->
+            <div id="webcam_controls" style="display:none">
+                <div class="action-buttons">
+                    <button id="btn_start_webcam" class="btn primary">▶ Start Camera</button>
+                    <button id="btn_stop_webcam"  class="btn danger"  disabled>■ Stop</button>
+                </div>
+                <div class="webcam-hint">Camera feed will appear above once started</div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ── Right Panel ── -->
+    <div class="right-panel">
+
+        <!-- Primary Stats: Left / Right Events -->
+        <div class="primary-stats-card">
+            <div class="primary-stat left-stat">
+                <div class="ps-icon">←</div>
+                <div class="ps-count" id="val_left_events">0</div>
+                <div class="ps-label">Looked Left</div>
+                <div class="ps-time"  id="val_left_time">0 times</div>
+            </div>
+            <div class="ps-divider"></div>
+            <div class="primary-stat right-stat">
+                <div class="ps-icon">→</div>
+                <div class="ps-count" id="val_right_events">0</div>
+                <div class="ps-label">Looked Right</div>
+                <div class="ps-time"  id="val_right_time">0 times</div>
+            </div>
+        </div>
+
+        <!-- Secondary Frame Stats -->
+        <div class="stats-card">
+            <div class="stat-box">
+                <div class="label">Total Frames</div>
+                <div class="value" id="val_total">0</div>
+            </div>
+            <div class="stat-box">
+                <div class="label">On Screen</div>
+                <div class="value" id="val_center">0</div>
+            </div>
+            <div class="stat-box">
+                <div class="label">Eyes Down</div>
+                <div class="value" id="val_down">0</div>
+            </div>
+            <div class="stat-box">
+                <div class="label">No Face</div>
+                <div class="value" id="val_missed">0</div>
+            </div>
+        </div>
+
+        <!-- Timeline -->
+        <div class="timeline-card">
+            <div class="timeline-header">
+                <h2>Gaze Events</h2>
+                <span class="timeline-count" id="timeline_count">0 events</span>
+            </div>
+            <div id="timeline">
+                <div class="empty-state" id="timeline_placeholder">
+                    Upload a video or start your webcam.<br>Left &amp; right gaze events will appear here.
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
