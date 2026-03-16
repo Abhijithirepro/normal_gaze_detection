@@ -668,3 +668,6 @@ function resetAll() {
 
     updateStatsUI();
 }
+
+// Default to Live Webcam mode on load
+btnModeWebcam.click();
