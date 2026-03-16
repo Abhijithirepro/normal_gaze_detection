@@ -46,23 +46,7 @@
             </label>
         </div>
 
-        <!-- Video / Camera Feed -->
-        <div class="video-card">
-            <video id="input_video" playsinline muted></video>
-            <canvas id="output_canvas"></canvas>
-
-            <div id="loading_overlay">
-                <div class="spinner"></div>
-                <div>Loading FaceMesh Model…</div>
-            </div>
-
-            <div id="status_overlay" class="status-overlay">Waiting…</div>
-
-            <!-- Live active-event banner (shown while person is looking away) -->
-            <div id="active_event_banner" class="active-event-banner" style="display:none"></div>
-        </div>
-
-        <!-- Controls Card -->
+        <!-- Controls Card (Start / Stop at top) -->
         <div class="controls-card" id="controls_card" style="display:none">
 
             <!-- Video mode controls -->
@@ -93,6 +77,22 @@
                 <div class="webcam-hint">Camera feed will appear above once started</div>
             </div>
 
+        </div>
+
+        <!-- Video / Camera Feed -->
+        <div class="video-card">
+            <video id="input_video" playsinline muted></video>
+            <canvas id="output_canvas"></canvas>
+
+            <div id="loading_overlay">
+                <div class="spinner"></div>
+                <div>Loading FaceMesh Model…</div>
+            </div>
+
+            <div id="status_overlay" class="status-overlay">Waiting…</div>
+
+            <!-- Live active-event banner (shown while person is looking away) -->
+            <div id="active_event_banner" class="active-event-banner" style="display:none"></div>
         </div>
     </div>
 
@@ -155,3 +155,4 @@
 <script src="script.js"></script>
 </body>
 </html>
+
