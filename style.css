@@ -60,7 +60,7 @@ header p {
     width: 100%;
 }
 .left-panel  { flex: 2; display: flex; flex-direction: column; gap: 12px; min-width: 0; }
-.right-panel { flex: 1; display: flex; flex-direction: column; gap: 12px; min-width: 260px; max-height: calc(100vh - 120px); }
+.right-panel { flex: 1.1; display: flex; flex-direction: column; gap: 12px; min-width: 260px; max-height: none; }
 
 /* ── Mode Toggle ─────────────────────────────────────────── */
 .mode-toggle-card {
@@ -329,7 +329,7 @@ video, canvas {
 
 /* ── Timeline Card ───────────────────────────────────────── */
 .timeline-card {
-    flex: 1;
+    flex: 1.6;              /* give timeline more vertical space */
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -453,10 +453,7 @@ video, canvas {
         flex-direction: column;
         max-width: 100%;
     }
-    .right-panel {
-        min-width: 0;
-        max-height: none;
-    }
+    .right-panel { min-width: 0; max-height: none; }
     .video-card {
         max-height: 60vh;
     }
